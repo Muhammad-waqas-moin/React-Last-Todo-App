@@ -10,6 +10,9 @@ import Paper from "@mui/material/Paper";
 import CustomButton from "./Common/customButton";
 import { ICONS } from "../assets/Icon";
 import { Stack } from "@mui/material";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { delTodo } from "../tools/Slicer";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -29,50 +32,52 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:last-child td, &:last-child th": {
     border: 0,
   },
-  width: 20,
-  backgroundColor: "red",
 }));
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [createData("Frozen yoghurt", 159)];
-
 const TodosTable = () => {
+  const { Todos } = useSelector((e) => e.Slicer);
+  const Dispatch = useDispatch();
+
+  // console.log(Todos);
+
   return (
     <TableContainer component={Paper}>
       <Table>
         <TableHead>
           <TableRow>
             <StyledTableCell>Name</StyledTableCell>
-            <StyledTableCell align="right">Task</StyledTableCell>
-            <StyledTableCell align="right">Action&nbsp;(g)</StyledTableCell>
+            <StyledTableCell align="left">Task</StyledTableCell>
+            <StyledTableCell align="right">Action</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
-              <StyledTableCell component="th" scope="row">
-                {row.name}
-              </StyledTableCell>
-              <StyledTableCell align="right">{row.calories}</StyledTableCell>
-              <StyledTableCell align="right">
-                <Stack justifyContent={"flex-end"} direction={"row"}>
-                  <CustomButton
-                    color="success"
-                    isButton={false}
-                    icon={<ICONS.EditIcon />}
-                  />
-                  <CustomButton
-                    color="error"
-                    isButton={false}
-                    icon={<ICONS.DeleteIcon />}
-                  />
-                </Stack>
-              </StyledTableCell>
-            </StyledTableRow>
-          ))}
+          {Todos.length > 0 &&
+            Todos.map((row) => (
+              <StyledTableRow key={row.id}>
+                <StyledTableCell component="th" scope="row">
+                  {row.Name}
+                </StyledTableCell>
+                <StyledTableCell width={100} align="left">
+                  {row.task}
+                </StyledTableCell>
+                <StyledTableCell>
+                  <Stack justifyContent={"flex-end"} direction={"row"}>
+                    <CustomButton
+                      color="success"
+                      isButton={false}
+                      onclick={() => console.log(row.id)}
+                      icon={<ICONS.EditIcon />}
+                    />
+                    <CustomButton
+                      color="error"
+                      isButton={false}
+                      onclick={() => Dispatch(delTodo(row.id))}
+                      icon={<ICONS.DeleteIcon />}
+                    />
+                  </Stack>
+                </StyledTableCell>
+              </StyledTableRow>
+            ))}
         </TableBody>
       </Table>
     </TableContainer>

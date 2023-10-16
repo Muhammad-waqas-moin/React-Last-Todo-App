@@ -1,6 +1,5 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { ICONS } from "../assets/Icon";
@@ -30,6 +29,7 @@ const MyModal = ({ title, Btn }) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
   const [name, setName] = React.useState("");
   const [task, setTask] = React.useState("");
   let [todos, setTodos] = React.useState({});
@@ -38,19 +38,15 @@ const MyModal = ({ title, Btn }) => {
     e.target.name === "Name"
       ? setName(e.target.value)
       : setTask(e.target.value);
-
-    setTodos({ Name: name, task: task });
+    setTodos({ Name: name, task: task, id: Todos.length });
   };
   const handleAddTodos = () => {
     Dispatch(add(todos));
     handleClose();
   };
 
-  // console.log(todos);
-
   return (
     <div>
-      {/* <Button onClick={handleOpen}>Open modal</Button>{" "} */}
       <CustomButton
         isButton={false}
         onclick={handleOpen}
@@ -79,16 +75,13 @@ const MyModal = ({ title, Btn }) => {
               label={"Name"}
               type={"text"}
               name={"Name"}
-              // value={name}
               onchange={handleChange}
             />
             <InputField
               label={"Task"}
               type={"text"}
               name={"Task"}
-              // onchange={handleChange}
-              // value={task}
-              onchange={(e) => handleChange(e)}
+              onchange={handleChange}
             />
           </Stack>
           <Stack alignItems={"end"} py={2}>
