@@ -7,6 +7,9 @@ import { ICONS } from "../assets/Icon";
 import CustomButton from "./Common/customButton";
 import { Stack } from "@mui/material";
 import InputField from "./InputField";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { add } from "../tools/Slicer";
 
 const style = {
   position: "absolute",
@@ -21,20 +24,25 @@ const style = {
 };
 
 const MyModal = ({ title, Btn }) => {
+  const { Name, Todos } = useSelector((e) => e.Slicer);
+  const Dispatch = useDispatch();
+
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [name, setName] = React.useState("");
   const [task, setTask] = React.useState("");
-  let [todos, setTodos] = React.useState([]);
+  let [todos, setTodos] = React.useState({});
 
   const handleChange = (e) => {
     e.target.name === "Name"
       ? setName(e.target.value)
       : setTask(e.target.value);
+
+    setTodos({ Name: name, task: task });
   };
   const handleAddTodos = () => {
-    setTodos((prev) => [...prev, { Name: name, task: task }]);
+    Dispatch(add(todos));
     handleClose();
   };
 
