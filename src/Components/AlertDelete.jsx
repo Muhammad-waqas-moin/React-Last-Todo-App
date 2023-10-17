@@ -8,8 +8,12 @@ import DialogTitle from "@mui/material/DialogTitle";
 import CustomButton from "./Common/customButton";
 import { ICONS } from "../assets/Icon";
 import { Stack, Typography } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { delTodo } from "../tools/Slicer";
 
-const AlertDelete = () => {
+const AlertDelete = ({id}) => {
+  const Dispatch = useDispatch();
+  
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -21,7 +25,7 @@ const AlertDelete = () => {
   };
   return (
     <div>
-      <CustomButton onclick={handleClickOpen} icon={<ICONS.DeleteIcon />} />
+      <CustomButton onclick={handleClickOpen}  icon={<ICONS.DeleteIcon   color="error"/>} />
 
       <Dialog
         // fullWidth
@@ -47,7 +51,7 @@ const AlertDelete = () => {
         <DialogActions>
           <CustomButton
             isButton={true}
-            onclick={() => alert("yes")}
+            onclick={() => Dispatch(delTodo(id))}
             title={"Yes"}
           />
           <CustomButton isButton={true} onclick={handleClose} title={"No"} />

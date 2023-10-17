@@ -4,6 +4,7 @@ import Header from "./Header";
 import TodosTable from "./Components/TodosTable";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import AlertDelete from "./Components/AlertDelete";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Header />
       </Stack>
       <TodosTable />
+      {/* <AlertDelete/> */}
     </Stack>
   );
 }

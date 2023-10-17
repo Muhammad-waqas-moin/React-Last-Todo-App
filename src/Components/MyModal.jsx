@@ -8,7 +8,8 @@ import { Stack } from "@mui/material";
 import InputField from "./InputField";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { add } from "../tools/Slicer";
+import { add, editTodo } from "../tools/Slicer";
+
 
 const style = {
   position: "absolute",
@@ -22,36 +23,46 @@ const style = {
   p: 4,
 };
 
-const MyModal = ({ title, Btn }) => {
-  const { Name, Todos } = useSelector((e) => e.Slicer);
+const MyModal = ({ title, BtnTtile ,Name , Task ,icon , data}) => {
+  const {  Todos } = useSelector((e) => e.Slicer);
   const Dispatch = useDispatch();
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);  
+  const [editName , setEditName] = React.useState(data?.Name);
+  const [editTask, setEditTask] =  React.useState(data?.Task);
+  
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const [name, setName] = React.useState("");
-  const [task, setTask] = React.useState("");
-  let [todos, setTodos] = React.useState({});
 
-  const handleChange = (e) => {
-    e.target.name === "Name"
-      ? setName(e.target.value)
-      : setTask(e.target.value);
-    setTodos({ Name: name, task: task, id: Todos.length });
-  };
-  const handleAddTodos = () => {
+  let [todos, setTodos] = React.useState({});
+    const handleChange=(e)=>{
+      setTodos({...todos ,[e.target.name]: e.target.value , id: Date.now()})
+    }
+    
+    const handleEditChange=(e)=>{
+      e.target.name === "Name" ? setEditName(e.target.value) : setEditTask(e.target.value);
+      setTodos({...todos ,[e.target.name]: e.target.value , id : data?.id})
+    }
+
+    const handleEdit=(e)=>{
+      // console.log()
+      Dispatch(editTodo(todos))
+      handleClose();
+    }
+
+  const handleAddTodos = () =>{
     Dispatch(add(todos));
     handleClose();
   };
-
+ 
   return (
     <div>
       <CustomButton
         isButton={false}
         onclick={handleOpen}
-        title={"Add"}
-        icon={<ICONS.AddIcon />}
+        title={title}
+        icon={icon}
       />
       <Modal
         open={open}
@@ -75,23 +86,30 @@ const MyModal = ({ title, Btn }) => {
               label={"Name"}
               type={"text"}
               name={"Name"}
-              onchange={handleChange}
+              // value={data ? data.Name:  Name}
+              value={editName }
+              onchange={(e)=>  BtnTtile == "EDIT" ? handleEditChange(e):  handleChange(e)}
+              // onchange={BtnTtile === "EDIT" ? ()=> handleEditChange :   ()=> handleChange}
             />
             <InputField
               label={"Task"}
               type={"text"}
               name={"Task"}
-              onchange={handleChange}
+              // value={data ? data.Task : Task}
+              value={editTask}
+              onchange={(e)=>  BtnTtile == "EDIT" ? handleEditChange(e):  handleChange(e)}
+              // onchange={BtnTtile === "ADD" ? ()=> handleEditChange :   ()=> handleChange}
             />
           </Stack>
           <Stack alignItems={"end"} py={2}>
             <CustomButton
               isButton={true}
-              title={"ADD"}
-              onclick={handleAddTodos}
+              title={BtnTtile}
+              onclick={(e)=> BtnTtile === "ADD" ? handleAddTodos(e) : handleEdit(e)}
               color={"primary"}
               variant={"contained"}
               btnWidth={"30%"}
+              value
             />
           </Stack>
         </Box>

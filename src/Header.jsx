@@ -2,6 +2,8 @@ import React from "react";
 import Stack from "@mui/material/Stack";
 import { Box, Typography } from "@mui/material";
 import MyModal from "./Components/MyModal";
+import { ICONS } from "./assets/Icon";
+
 
 const Header = () => {
   const addtodos = () => {
@@ -13,8 +15,7 @@ const Header = () => {
         My
         <span style={{ fontSize: "2rem", fontFamily: "cursive" }}>Todos</span>
       </Typography>
-
-      <MyModal title="Add Todo" />
+      <MyModal BtnTtile={"ADD"} title="Add Todo" icon={<ICONS.AddIcon/>} />
     </Stack>
   );
 };

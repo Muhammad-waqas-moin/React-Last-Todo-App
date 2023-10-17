@@ -13,6 +13,8 @@ import { Stack } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { delTodo } from "../tools/Slicer";
+import AlertDelete from "./AlertDelete";
+import MyModal from "./MyModal";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -52,28 +54,30 @@ const TodosTable = () => {
         </TableHead>
         <TableBody>
           {Todos.length > 0 &&
-            Todos.map((row) => (
+            Todos.map((row , index) => (
               <StyledTableRow key={row.id}>
                 <StyledTableCell component="th" scope="row">
                   {row.Name}
                 </StyledTableCell>
                 <StyledTableCell width={100} align="left">
-                  {row.task}
+                  {row.Task}
                 </StyledTableCell>
                 <StyledTableCell>
                   <Stack justifyContent={"flex-end"} direction={"row"}>
-                    <CustomButton
+                  <MyModal data={row} BtnTtile={"EDIT"} title="Edit Todos" icon={<ICONS.EditIcon/>} />
+                    {/* <CustomButton
                       color="success"
                       isButton={false}
                       onclick={() => console.log(row.id)}
                       icon={<ICONS.EditIcon />}
-                    />
-                    <CustomButton
+                    /> */}
+                    {/* <CustomButton
                       color="error"
                       isButton={false}
                       onclick={() => Dispatch(delTodo(row.id))}
                       icon={<ICONS.DeleteIcon />}
-                    />
+                    /> */}
+                    <AlertDelete id={row.id}/>
                   </Stack>
                 </StyledTableCell>
               </StyledTableRow>
