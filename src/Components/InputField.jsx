@@ -12,7 +12,7 @@ const InputField = ({ label, type, name, onchange, value }) => {
         id="outlined-basic"
         label={label}
         variant="outlined"
-        placeholder="name"
+        placeholder={name}
       />
     </Stack>
   );

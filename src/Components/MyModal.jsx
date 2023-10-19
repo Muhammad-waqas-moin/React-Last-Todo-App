@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { add, editTodo } from "../tools/Slicer";
 
-
 const style = {
   position: "absolute",
   top: "50%",
@@ -23,39 +22,55 @@ const style = {
   p: 4,
 };
 
-const MyModal = ({ title, BtnTtile ,Name , Task ,icon , data}) => {
-  const {  Todos } = useSelector((e) => e.Slicer);
+const MyModal = ({ title, BtnTtile, Name, Task, icon, data }) => {
+  const { Todos } = useSelector((e) => e.Slicer);
   const Dispatch = useDispatch();
 
-  const [open, setOpen] = React.useState(false);  
-  const [editName , setEditName] = React.useState(data?.Name);
-  const [editTask, setEditTask] =  React.useState(data?.Task);
-  
+  const [open, setOpen] = React.useState(false);
+  const [editName, setEditName] = React.useState(data?.Name);
+  const [editTask, setEditTask] = React.useState(data?.Task);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-
   let [todos, setTodos] = React.useState({});
-    const handleChange=(e)=>{
-      setTodos({...todos ,[e.target.name]: e.target.value , id: Date.now()})
-    }
-    
-    const handleEditChange=(e)=>{
-      e.target.name === "Name" ? setEditName(e.target.value) : setEditTask(e.target.value);
-      setTodos({...todos ,[e.target.name]: e.target.value , id : data?.id})
-    }
 
-    const handleEdit=(e)=>{
-      // console.log()
-      Dispatch(editTodo(todos))
-      handleClose();
-    }
+  const handleChange = (e) => {
+    setTodos({ ...todos, [e.target.name]: e.target.value, id: Date.now() });
+  };
 
-  const handleAddTodos = () =>{
+  const handleEditChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    if (name === "Name") {
+      setEditName(value);
+      setTodos((prevTodos) => ({
+        ...prevTodos,
+        Name: value,
+        Task: editTask,
+        id: data?.id,
+      }));
+    } else if (name === "Task") {
+      setEditTask(value);
+      setTodos((prevTodos) => ({
+        ...prevTodos,
+        Name: editName,
+        Task: value,
+        id: data?.id,
+      }));
+    }
+  };
+
+  const handleEdit = (e) => {
+    Dispatch(editTodo(todos));
+    handleClose();
+  };
+
+  const handleAddTodos = () => {
     Dispatch(add(todos));
     handleClose();
   };
- 
+
   return (
     <div>
       <CustomButton
@@ -66,7 +81,6 @@ const MyModal = ({ title, BtnTtile ,Name , Task ,icon , data}) => {
       />
       <Modal
         open={open}
-        // onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -87,25 +101,28 @@ const MyModal = ({ title, BtnTtile ,Name , Task ,icon , data}) => {
               type={"text"}
               name={"Name"}
               // value={data ? data.Name:  Name}
-              value={editName }
-              onchange={(e)=>  BtnTtile == "EDIT" ? handleEditChange(e):  handleChange(e)}
-              // onchange={BtnTtile === "EDIT" ? ()=> handleEditChange :   ()=> handleChange}
+              value={editName}
+              onchange={(e) =>
+                BtnTtile == "EDIT" ? handleEditChange(e) : handleChange(e)
+              }
             />
             <InputField
               label={"Task"}
               type={"text"}
               name={"Task"}
-              // value={data ? data.Task : Task}
               value={editTask}
-              onchange={(e)=>  BtnTtile == "EDIT" ? handleEditChange(e):  handleChange(e)}
-              // onchange={BtnTtile === "ADD" ? ()=> handleEditChange :   ()=> handleChange}
+              onchange={(e) =>
+                BtnTtile == "EDIT" ? handleEditChange(e) : handleChange(e)
+              }
             />
           </Stack>
           <Stack alignItems={"end"} py={2}>
             <CustomButton
               isButton={true}
               title={BtnTtile}
-              onclick={(e)=> BtnTtile === "ADD" ? handleAddTodos(e) : handleEdit(e)}
+              onclick={(e) =>
+                BtnTtile === "ADD" ? handleAddTodos(e) : handleEdit(e)
+              }
               color={"primary"}
               variant={"contained"}
               btnWidth={"30%"}
